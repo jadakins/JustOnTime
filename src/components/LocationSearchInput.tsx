@@ -231,7 +231,7 @@ export default function LocationSearchInput({
       {isOpen && (
         <div
           ref={dropdownRef}
-          className="absolute z-50 w-full mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg max-h-72 overflow-y-auto"
+          className="absolute z-[2100] w-full mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg max-h-72 overflow-y-auto"
         >
           {/* Loading indicator */}
           {isSearching && (
