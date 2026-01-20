@@ -85,10 +85,25 @@ export default function LifeInJakarta() {
       return prevPlan.map(day => {
         if (day.dayOfWeek !== dayOfWeek) return day;
 
-        // Get the new destination if destinationId changed
-        const newDestination = updates.destinationId
-          ? getDestinationById(updates.destinationId)
-          : day.destination;
+        // Determine the new destination
+        let newDestination = day.destination;
+
+        // If customLocation is provided, create a destination from it
+        if (updates.customLocation) {
+          newDestination = {
+            id: `custom-${updates.customLocation.id}`,
+            name: updates.customLocation.name,
+            nameId: updates.customLocation.name,
+            shortAddress: updates.customLocation.address.split(',')[0] || updates.customLocation.address,
+            fullAddress: updates.customLocation.address,
+            coordinates: updates.customLocation.coordinates,
+            icon: '📍',
+            category: 'other' as const,
+          };
+        } else if (updates.destinationId) {
+          // If destinationId changed, get that destination
+          newDestination = getDestinationById(updates.destinationId) || day.destination;
+        }
 
         // Update the activity
         const updatedActivity: WeeklyActivity = {
@@ -99,7 +114,7 @@ export default function LifeInJakarta() {
         return {
           ...day,
           activity: updatedActivity,
-          destination: newDestination || day.destination,
+          destination: newDestination,
         };
       });
     });
