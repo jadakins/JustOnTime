@@ -92,8 +92,8 @@ export async function fetchTrafficData(): Promise<TrafficData[]> {
     const origin = `${region.coordinates[0]},${region.coordinates[1]}`;
 
     try {
-      // Get directions from region to city center with traffic
-      const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${cityCenter}&departure_time=now&traffic_model=best_guess&key=${GOOGLE_MAPS_API_KEY}`;
+      // Get directions from region to city center with traffic (via API route to avoid CORS)
+      const url = `/api/directions?origin=${origin}&destination=${cityCenter}`;
 
       const response = await fetch(url);
       const data: DirectionsResponse = await response.json();
@@ -194,8 +194,8 @@ export async function fetchRouteData(fromRegionId: string, toRegionId: string): 
   const origin = `${fromRegion.coordinates[0]},${fromRegion.coordinates[1]}`;
   const destination = `${toRegion.coordinates[0]},${toRegion.coordinates[1]}`;
 
-  // Fetch with alternatives to get multiple route options
-  const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&departure_time=now&traffic_model=best_guess&alternatives=true&key=${GOOGLE_MAPS_API_KEY}`;
+  // Fetch with alternatives to get multiple route options (via API route to avoid CORS)
+  const url = `/api/directions?origin=${origin}&destination=${destination}&alternatives=true`;
 
   const response = await fetch(url);
   const data: DirectionsResponse = await response.json();
@@ -258,7 +258,8 @@ export async function fetchFutureTrafficEstimate(
   const destination = `${toRegion.coordinates[0]},${toRegion.coordinates[1]}`;
   const departureTimestamp = Math.floor(departureTime.getTime() / 1000);
 
-  const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&departure_time=${departureTimestamp}&traffic_model=best_guess&key=${GOOGLE_MAPS_API_KEY}`;
+  // Use API route to avoid CORS
+  const url = `/api/directions?origin=${origin}&destination=${destination}&departure_time=${departureTimestamp}`;
 
   const response = await fetch(url);
   const data: DirectionsResponse = await response.json();

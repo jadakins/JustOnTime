@@ -17,7 +17,34 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&departure_time=now&traffic_model=best_guess&key=${apiKey}`;
+    // Build URL with optional parameters
+    const params = new URLSearchParams({
+      origin,
+      destination,
+      key: apiKey,
+    });
+
+    // Add optional parameters if provided
+    const departureTime = searchParams.get('departure_time');
+    if (departureTime) {
+      params.append('departure_time', departureTime);
+    } else {
+      params.append('departure_time', 'now');
+    }
+
+    const trafficModel = searchParams.get('traffic_model');
+    if (trafficModel) {
+      params.append('traffic_model', trafficModel);
+    } else {
+      params.append('traffic_model', 'best_guess');
+    }
+
+    const alternatives = searchParams.get('alternatives');
+    if (alternatives) {
+      params.append('alternatives', alternatives);
+    }
+
+    const url = `https://maps.googleapis.com/maps/api/directions/json?${params.toString()}`;
 
     const response = await fetch(url);
     const data = await response.json();
