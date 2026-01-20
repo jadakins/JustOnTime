@@ -23,9 +23,21 @@ export async function GET(request: NextRequest) {
     const response = await fetch(url);
     const data = await response.json();
 
+    // Log Google API errors for debugging
+    if (data.status !== 'OK' && data.status !== 'ZERO_RESULTS') {
+      console.error('Google Places API error:', {
+        status: data.status,
+        error_message: data.error_message,
+        query: query
+      });
+    }
+
     return NextResponse.json(data);
   } catch (error) {
     console.error('Places API error:', error);
-    return NextResponse.json({ error: 'Failed to fetch places' }, { status: 500 });
+    return NextResponse.json({
+      error: 'Failed to fetch places',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    }, { status: 500 });
   }
 }
