@@ -379,6 +379,7 @@ export default function LifeInJakarta() {
             language={language}
             weatherData={weatherData}
             onRerouteHome={handleRerouteHome}
+            routeData={routeData}
           />
         </div>
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useCallback, useEffect } from 'react';
-import { DayPlan } from '@/types/life';
+import { DayPlan, RouteDisplayData } from '@/types/life';
 import { Language, WeatherData } from '@/types';
 import TimeSlider, { TimeComparisonCards } from './TimeSlider';
 import { getWeatherImpact, isRainyCondition, getWeatherIcon, formatWeatherImpactBadge } from '@/services/weatherImpact';
@@ -16,6 +16,7 @@ interface TodayViewProps {
   language: Language;
   weatherData: WeatherData | null;
   onRerouteHome: (dayOfWeek: number) => void; // Changed to switch activity to home
+  routeData?: RouteDisplayData | null; // Real route duration from Google Maps API
 }
 
 // Calculate arrival status based on scheduled vs estimated arrival time
@@ -75,6 +76,7 @@ export default function TodayView({
   language,
   weatherData,
   onRerouteHome,
+  routeData,
 }: TodayViewProps) {
   // Extract values from todayPlan (may be null)
   const activity = todayPlan?.activity;
@@ -85,7 +87,8 @@ export default function TodayView({
   // Parse scheduled time to calculate dynamic time ranges
   const [schedHours, schedMins] = scheduledTime.split(':').map(Number);
   const scheduledMinutes = schedHours * 60 + schedMins;
-  const baseDuration = rec?.duration || 35;
+  // Use actual Google Maps duration if available, otherwise fall back to recommendation or default
+  const baseDuration = routeData?.duration || rec?.duration || 35;
 
   // Calculate optimal departure time (scheduled time - base duration - buffer)
   const optimalDepartureMinutes = scheduledMinutes - baseDuration - 15; // 15 min buffer
@@ -150,7 +153,8 @@ export default function TodayView({
   // Get recommendation for the currently selected time - must be called before any early returns
   const selectedTimeRecommendation = useMemo(() => {
     const [hours] = selectedTime.split(':').map(Number);
-    const baseDuration = rec?.duration || 35;
+    // Use actual Google Maps duration if available, otherwise fall back to recommendation or default
+    const baseDuration = routeData?.duration || rec?.duration || 35;
     const weatherMultiplier = weatherImpact.multiplier;
 
     // Peak hours: 17:00-19:00
@@ -165,7 +169,7 @@ export default function TodayView({
       duration,
       trafficLevel: isPeak ? 'heavy' : 'light' as 'heavy' | 'light' | 'moderate',
     };
-  }, [selectedTime, weatherImpact.multiplier, rec?.duration]);
+  }, [selectedTime, weatherImpact.multiplier, rec?.duration, routeData?.duration]);
 
   // Use the selected time recommendation as the best option
   const bestOption = selectedTimeRecommendation;
