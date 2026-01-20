@@ -16,6 +16,7 @@ interface ActivitySetupModalProps {
   day: DayPlan | null;
   language: Language;
   onSave: (dayOfWeek: number, activity: Partial<WeeklyActivity>) => void;
+  homeLocation: CustomLocation;
 }
 
 export default function ActivitySetupModal({
@@ -24,6 +25,7 @@ export default function ActivitySetupModal({
   day,
   language,
   onSave,
+  homeLocation,
 }: ActivitySetupModalProps) {
   // Local state for form
   const [selectedActivity, setSelectedActivity] = useState<ActivityType>('home');
@@ -175,10 +177,16 @@ export default function ActivitySetupModal({
                   <span className="text-slate-400">📍</span>
                   <div className="flex-1">
                     <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                      {activityOption && (language === 'id' ? activityOption.locationNameId : activityOption.locationName)}
+                      {selectedActivity === 'home'
+                        ? homeLocation.name
+                        : activityOption && (language === 'id' ? activityOption.locationNameId : activityOption.locationName)
+                      }
                     </p>
                     <p className="text-xs text-slate-500">
-                      {language === 'id' ? 'Lokasi default' : 'Default location'}
+                      {selectedActivity === 'home'
+                        ? homeLocation.address
+                        : (language === 'id' ? 'Lokasi default' : 'Default location')
+                      }
                     </p>
                   </div>
                 </div>

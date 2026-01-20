@@ -464,6 +464,7 @@ export default function LifeInJakarta() {
         day={editingDay}
         language={language}
         onSave={handleActivityChange}
+        homeLocation={homeLocation}
       />
     </div>
   );
