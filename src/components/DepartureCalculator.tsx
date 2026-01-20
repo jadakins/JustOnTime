@@ -60,7 +60,7 @@ export default function DepartureCalculator({ language }: DepartureCalculatorPro
 
   // Auto-generate recommendations when inputs change
   // COMMENTED OUT: Mock data - using real APIs instead
-  const recommendations = useMemo(() => {
+  const recommendations = useMemo((): DepartureRecommendation[] => {
     const fromRegion = tripDirection === 'home-to-office' ? homeRegion : officeRegion;
     const toRegion = tripDirection === 'home-to-office' ? officeRegion : homeRegion;
     // return generateDepartureRecommendations(parseMinutesToDate(timeMinutes), fromRegion, toRegion, 4);
@@ -68,7 +68,7 @@ export default function DepartureCalculator({ language }: DepartureCalculatorPro
   }, [timeMinutes, homeRegion, officeRegion, tripDirection]);
 
   const timePeriod = getTimePeriod(timeMinutes);
-  const bestRecommendation: DepartureRecommendation | undefined = recommendations[0] as DepartureRecommendation | undefined;
+  const bestRecommendation: DepartureRecommendation | undefined = recommendations.length > 0 ? recommendations[0] : undefined;
 
   return (
     <div className="card h-full flex flex-col">
