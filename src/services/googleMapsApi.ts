@@ -28,21 +28,15 @@ interface PlacesTextSearchResponse {
 }
 
 /**
- * Search for places using Google Places Text Search API
+ * Search for places using Google Places Text Search API (via API route)
  */
 export async function searchPlaces(
   query: string,
   language: Language = 'id'
 ): Promise<PlaceResult[]> {
-  if (!GOOGLE_MAPS_API_KEY || GOOGLE_MAPS_API_KEY === 'your_key_here') {
-    console.warn('Google Maps API key not configured');
-    return [];
-  }
-
-  // Bias search to Jakarta area
-
   try {
-    const url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(query + ' Jakarta')}&location=-6.2088,106.8456&radius=30000&language=${language}&key=${GOOGLE_MAPS_API_KEY}`;
+    // Use our API route to avoid CORS issues
+    const url = `/api/places?query=${encodeURIComponent(query)}&language=${language}`;
 
     const response = await fetch(url);
     const data: PlacesTextSearchResponse = await response.json();
