@@ -262,20 +262,19 @@ export default function LifeInJakarta() {
     setEditingDay(null);
   }, []);
 
-  // Fetch route data when selected day changes
+  // Fetch route data when selected day changes OR for today's plan
   useEffect(() => {
-    if (selectedDay === null) {
-      setRouteData(null);
-      return;
-    }
+    // Determine which day to fetch route for
+    const dayPlan = selectedDay !== null
+      ? weeklyPlan.find(p => p.dayOfWeek === selectedDay)
+      : todayPlan;
 
-    const dayPlan = weeklyPlan.find(p => p.dayOfWeek === selectedDay);
     if (!dayPlan?.destination) {
       setRouteData(null);
       return;
     }
 
-    // Fetch Google route polyline
+    // Fetch Google route polyline with real traffic data
     const fetchRoute = async () => {
       try {
         const route = await fetchRouteWithPolyline(
@@ -290,7 +289,7 @@ export default function LifeInJakarta() {
     };
 
     fetchRoute();
-  }, [selectedDay, weeklyPlan, officeLocation]);
+  }, [selectedDay, weeklyPlan, officeLocation, todayPlan]);
 
   // Open Google Maps with directions
   const handleOpenInMaps = useCallback(() => {

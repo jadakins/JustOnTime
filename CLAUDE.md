@@ -17,6 +17,8 @@ npm run start        # Start production server
 npm run lint         # Run ESLint
 ```
 
+NOTE: FOR ALL DEPLOYMENTS USE THE PRE-COMMIT-DEPLOY subagent.
+
 ## Architecture
 
 ### Data Flow

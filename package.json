@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test:weather": "node scripts/test-weather-api.js"
+    "test:weather": "node scripts/test-weather-api.js",
+    "test:route": "node scripts/test-route-duration.js"
   },
   "dependencies": {
     "next": "^14.0.0",
