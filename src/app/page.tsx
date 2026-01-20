@@ -9,6 +9,7 @@ import {
   MyWeek,
   TodayView,
   HomeLocationEditor,
+  OfficeLocationEditor,
 } from '@/components';
 import ActivitySetupModal from '@/components/ActivitySetupModal';
 import {
@@ -66,6 +67,14 @@ export default function LifeInJakarta() {
     name: homeConfig.name,
     address: homeConfig.fullAddress,
     coordinates: homeConfig.coordinates,
+  });
+
+  // Office location state - editable by user
+  const [officeLocation, setOfficeLocation] = useState<CustomLocation>({
+    id: 'office',
+    name: officeConfig.name,
+    address: officeConfig.fullAddress,
+    coordinates: officeConfig.coordinates,
   });
 
   // Update all "home" activities when home location changes
@@ -267,7 +276,7 @@ export default function LifeInJakarta() {
     const fetchRoute = async () => {
       try {
         const route = await fetchRouteWithPolyline(
-          officeConfig.coordinates,
+          officeLocation.coordinates,
           dayPlan.destination!.coordinates
         );
         setRouteData(route);
@@ -278,7 +287,7 @@ export default function LifeInJakarta() {
     };
 
     fetchRoute();
-  }, [selectedDay, weeklyPlan]);
+  }, [selectedDay, weeklyPlan, officeLocation]);
 
   // Open Google Maps with directions
   const handleOpenInMaps = useCallback(() => {
@@ -288,12 +297,12 @@ export default function LifeInJakarta() {
 
     if (dayPlan?.destination) {
       const url = getGoogleMapsUrl(
-        officeConfig.coordinates,
+        officeLocation.coordinates,
         dayPlan.destination.coordinates
       );
       window.open(url, '_blank');
     }
-  }, [selectedDay, weeklyPlan, todayPlan]);
+  }, [selectedDay, weeklyPlan, todayPlan, officeLocation]);
 
   // Loading state - show until client has mounted and data is ready
   if (!isClient || !weatherData) {
@@ -332,7 +341,7 @@ export default function LifeInJakarta() {
                 {language === 'id' ? 'Dari Kantor' : 'From Office'}
               </p>
               <p className="font-semibold text-slate-800 dark:text-white">
-                {officeConfig.shortAddress}
+                {officeLocation.address.split(',')[0] || officeLocation.address}
               </p>
             </div>
           </div>
@@ -341,8 +350,17 @@ export default function LifeInJakarta() {
           <LiveConditions weatherData={weatherData} language={language} />
         </div>
 
-        {/* Home Location Editor */}
-        <div className="mb-6">
+        {/* Location Editors */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <OfficeLocationEditor
+            language={language}
+            officeLocation={officeLocation}
+            onOfficeLocationChange={(location) => {
+              if (location) {
+                setOfficeLocation(location);
+              }
+            }}
+          />
           <HomeLocationEditor
             language={language}
             homeLocation={homeLocation}
@@ -408,6 +426,7 @@ export default function LifeInJakarta() {
                   weeklyPlan={weeklyPlan}
                   routeData={routeData}
                   homeLocation={homeLocation}
+                  officeLocation={officeLocation}
                 />
 
                 {/* Map Legend - Comprehensive */}

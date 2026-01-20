@@ -4,7 +4,6 @@ import { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import { Language } from '@/types';
 import { Destination, DayPlan, RouteDisplayData, CustomLocation } from '@/types/life';
-import { officeConfig } from '@/config/locations';
 
 // ============================================================================
 // LIFE MAP - SIMPLIFIED MAP VIEW
@@ -18,6 +17,7 @@ interface LifeMapProps {
   weeklyPlan: DayPlan[];
   routeData?: RouteDisplayData | null;
   homeLocation: CustomLocation;
+  officeLocation: CustomLocation;
 }
 
 // Marker colors
@@ -40,6 +40,7 @@ export default function LifeMap({
   weeklyPlan,
   routeData,
   homeLocation,
+  officeLocation,
 }: LifeMapProps) {
   const mapRef = useRef<L.Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -52,7 +53,7 @@ export default function LifeMap({
     if (!mapContainerRef.current || mapRef.current) return;
 
     mapRef.current = L.map(mapContainerRef.current, {
-      center: officeConfig.coordinates,
+      center: officeLocation.coordinates,
       zoom: 12,
       zoomControl: true,
       scrollWheelZoom: true,
@@ -110,9 +111,9 @@ export default function LifeMap({
 
     // 1. Add Office marker (always visible, prominent)
     const officeIcon = createOfficeIcon();
-    const officeMarker = L.marker(officeConfig.coordinates, { icon: officeIcon })
+    const officeMarker = L.marker(officeLocation.coordinates, { icon: officeIcon })
       .addTo(mapRef.current)
-      .bindPopup(createOfficePopup(language));
+      .bindPopup(createOfficePopup(officeLocation, language));
     markersRef.current.push(officeMarker);
 
     // 2. Add Home marker (always visible)
@@ -164,7 +165,7 @@ export default function LifeMap({
       } else {
         // Fallback: Draw dashed line between points
         const routeCoords: L.LatLngExpression[] = [
-          officeConfig.coordinates,
+          officeLocation.coordinates,
           activeDayPlan.destination.coordinates,
         ];
 
@@ -181,10 +182,10 @@ export default function LifeMap({
       }
     } else {
       // No destination - just show office and home
-      const bounds = L.latLngBounds([officeConfig.coordinates, homeLocation.coordinates]);
+      const bounds = L.latLngBounds([officeLocation.coordinates, homeLocation.coordinates]);
       mapRef.current.fitBounds(bounds, { padding: [60, 60] });
     }
-  }, [language, selectedDay, weeklyPlan, routeData, activeDayPlan, today, homeLocation]);
+  }, [language, selectedDay, weeklyPlan, routeData, activeDayPlan, today, homeLocation, officeLocation]);
 
   return (
     <div
@@ -253,22 +254,22 @@ function createDestinationIcon(dest: Destination, isActive: boolean): L.DivIcon 
   });
 }
 
-function createOfficePopup(language: Language): string {
+function createOfficePopup(officeLocation: CustomLocation, language: Language): string {
   return `
     <div style="padding: 12px; font-family: -apple-system, sans-serif; min-width: 200px;">
       <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
         <span style="font-size: 28px;">🏢</span>
         <div>
           <h3 style="margin: 0; font-size: 16px; font-weight: 700; color: #1e40af;">
-            ${language === 'id' ? officeConfig.nameId : officeConfig.name}
+            ${officeLocation.name}
           </h3>
           <p style="margin: 0; font-size: 12px; color: #64748b;">
-            ${officeConfig.companyName}
+            ${language === 'id' ? 'Kantor' : 'Office'}
           </p>
         </div>
       </div>
       <p style="margin: 0; font-size: 12px; color: #64748b;">
-        ${officeConfig.shortAddress}
+        ${officeLocation.address}
       </p>
     </div>
   `;
