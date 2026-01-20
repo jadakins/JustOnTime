@@ -1,0 +1,322 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================================
+   GLOBAL STYLES - Jakarta Flood & Traffic Dashboard
+   Color-blind friendly palette using blue/orange/purple instead of red/yellow/green
+   ============================================================================ */
+
+:root {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-border: #e2e8f0;
+  --primary: #0369a1;
+  --primary-dark: #075985;
+
+  /* Colorblind-friendly severity colors */
+  /* Using blue (safe), orange (warning), purple/magenta (danger) */
+  --severity-low: #0284c7;      /* Sky blue - safe */
+  --severity-medium: #ea580c;   /* Orange - warning */
+  --severity-high: #9333ea;     /* Purple - danger */
+
+  --severity-low-bg: #e0f2fe;
+  --severity-medium-bg: #ffedd5;
+  --severity-high-bg: #f3e8ff;
+
+  --severity-low-text: #0c4a6e;
+  --severity-medium-text: #9a3412;
+  --severity-high-text: #581c87;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0f172a;
+    --foreground: #f8fafc;
+    --card: #1e293b;
+    --card-border: #334155;
+
+    --severity-low-bg: #0c4a6e;
+    --severity-medium-bg: #7c2d12;
+    --severity-high-bg: #581c87;
+
+    --severity-low-text: #7dd3fc;
+    --severity-medium-text: #fdba74;
+    --severity-high-text: #d8b4fe;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+   ============================================================================ */
+
+@layer components {
+  /* Card component - more refined shadows */
+  .card {
+    @apply bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden;
+    @apply dark:bg-slate-800 dark:border-slate-700/50;
+  }
+
+  .card-header {
+    @apply px-5 py-4 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white;
+    @apply dark:border-slate-700/50 dark:from-slate-800 dark:to-slate-800/50;
+  }
+
+  .card-body {
+    @apply p-5;
+  }
+
+  /* Colorblind-friendly severity badges with icons */
+  .badge {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold;
+  }
+
+  .badge-low {
+    background: var(--severity-low-bg);
+    color: var(--severity-low-text);
+  }
+
+  .badge-medium {
+    background: var(--severity-medium-bg);
+    color: var(--severity-medium-text);
+  }
+
+  .badge-high {
+    background: var(--severity-high-bg);
+    color: var(--severity-high-text);
+  }
+
+  /* Status indicators with shapes for accessibility */
+  .status-indicator {
+    @apply inline-flex items-center justify-center w-5 h-5 text-xs font-bold;
+  }
+
+  .status-indicator-low {
+    @apply rounded-full;
+    background: var(--severity-low);
+    color: white;
+  }
+
+  .status-indicator-medium {
+    @apply rotate-45;
+    background: var(--severity-medium);
+    color: white;
+    border-radius: 2px;
+  }
+
+  .status-indicator-high {
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    background: var(--severity-high);
+    color: white;
+  }
+
+  /* Legacy status dots - kept for compatibility but enhanced */
+  .status-dot {
+    @apply w-3 h-3 inline-block;
+  }
+
+  .status-dot-low {
+    @apply rounded-full;
+    background: var(--severity-low);
+  }
+
+  .status-dot-medium {
+    @apply rotate-45 rounded-sm;
+    background: var(--severity-medium);
+  }
+
+  .status-dot-high {
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    background: var(--severity-high);
+    @apply animate-pulse;
+  }
+
+  /* Button styles - more refined */
+  .btn {
+    @apply inline-flex items-center justify-center px-5 py-2.5 rounded-xl font-semibold transition-all duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+    @apply shadow-sm hover:shadow-md active:scale-[0.98];
+  }
+
+  .btn-primary {
+    @apply bg-gradient-to-r from-sky-600 to-blue-600 text-white;
+    @apply hover:from-sky-700 hover:to-blue-700 focus:ring-sky-500;
+  }
+
+  .btn-secondary {
+    @apply bg-slate-100 text-slate-700 hover:bg-slate-200 focus:ring-slate-400;
+    @apply dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600;
+  }
+
+  /* Input styles - more polished */
+  .input {
+    @apply w-full px-4 py-2.5 rounded-xl border border-slate-300 bg-white;
+    @apply focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500;
+    @apply dark:bg-slate-800 dark:border-slate-600 dark:text-white;
+    @apply transition-all duration-200;
+  }
+
+  .select {
+    @apply w-full px-4 py-2.5 rounded-xl border border-slate-300 bg-white cursor-pointer;
+    @apply focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500;
+    @apply dark:bg-slate-800 dark:border-slate-600 dark:text-white;
+    @apply transition-all duration-200;
+  }
+
+  /* Progress bar - colorblind friendly */
+  .progress-bar {
+    @apply h-2.5 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden;
+  }
+
+  .progress-fill {
+    @apply h-full rounded-full transition-all duration-500;
+  }
+
+  .progress-fill-low {
+    background: var(--severity-low);
+  }
+
+  .progress-fill-medium {
+    background: var(--severity-medium);
+  }
+
+  .progress-fill-high {
+    background: var(--severity-high);
+  }
+
+  /* Recommendation card */
+  .recommendation-card {
+    @apply p-4 rounded-xl border-2 transition-all cursor-pointer;
+    @apply hover:shadow-lg hover:-translate-y-0.5;
+  }
+
+  .recommendation-card.best {
+    @apply border-sky-500 bg-gradient-to-br from-sky-50 to-blue-50;
+    @apply dark:from-sky-900/30 dark:to-blue-900/30;
+  }
+
+  /* Time slider styling */
+  .time-slider {
+    @apply w-full h-2 rounded-full appearance-none cursor-pointer;
+    background: linear-gradient(to right, var(--severity-low), var(--severity-medium), var(--severity-high));
+  }
+
+  .time-slider::-webkit-slider-thumb {
+    @apply appearance-none w-6 h-6 rounded-full bg-white border-4 border-sky-600 shadow-lg;
+    @apply cursor-grab active:cursor-grabbing;
+  }
+
+  .time-slider::-moz-range-thumb {
+    @apply w-6 h-6 rounded-full bg-white border-4 border-sky-600 shadow-lg;
+    @apply cursor-grab active:cursor-grabbing;
+  }
+
+  /* Mobile responsiveness */
+  @screen md {
+    .card-header {
+      @apply px-6 py-5;
+    }
+
+    .card-body {
+      @apply p-6;
+    }
+  }
+}
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
+/* ============================================================================
+   LEAFLET MAP OVERRIDES
+   ============================================================================ */
+
+.leaflet-container {
+  @apply rounded-xl;
+  font-family: inherit;
+}
+
+.leaflet-popup-content-wrapper {
+  @apply rounded-xl shadow-xl border-0;
+}
+
+.leaflet-popup-content {
+  @apply m-0 p-0;
+}
+
+.leaflet-popup-tip {
+  @apply shadow-none;
+}
+
+/* Custom map markers with shapes for accessibility */
+.custom-marker {
+  @apply flex items-center justify-center text-white font-bold text-sm;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.custom-marker-low {
+  @apply rounded-full;
+  background: var(--severity-low);
+}
+
+.custom-marker-medium {
+  @apply rotate-45 rounded-sm;
+  background: var(--severity-medium);
+}
+
+.custom-marker-high {
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  background: var(--severity-high);
+}
