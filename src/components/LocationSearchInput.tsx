@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { Language } from '@/types';
 import { CustomLocation } from '@/types/life';
+import { searchPlaces, PlaceResult } from '@/services/googleMapsApi';
 
 // ============================================================================
 // LOCATION SEARCH INPUT
@@ -50,6 +51,9 @@ export default function LocationSearchInput({
   const [isOpen, setIsOpen] = useState(false);
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [customAddress, setCustomAddress] = useState('');
+  const [googlePlaces, setGooglePlaces] = useState<PlaceResult[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchError, setSearchError] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -61,7 +65,36 @@ export default function LocationSearchInput({
     }
   }, [value]);
 
-  // Filter locations based on query
+  // Search Google Places when query changes (with debounce)
+  useEffect(() => {
+    if (!query.trim() || query.length < 3) {
+      setGooglePlaces([]);
+      setSearchError(false);
+      return;
+    }
+
+    const searchTimeout = setTimeout(async () => {
+      setIsSearching(true);
+      setSearchError(false);
+      try {
+        const results = await searchPlaces(query, language);
+        setGooglePlaces(results);
+        if (results.length === 0) {
+          setSearchError(true);
+        }
+      } catch (error) {
+        console.error('Google Places search failed:', error);
+        setSearchError(true);
+        setGooglePlaces([]);
+      } finally {
+        setIsSearching(false);
+      }
+    }, 500); // 500ms debounce
+
+    return () => clearTimeout(searchTimeout);
+  }, [query, language]);
+
+  // Filter preset locations based on query (fallback)
   const filteredLocations = useMemo(() => {
     if (!query.trim()) return PRESET_LOCATIONS.slice(0, 8); // Show first 8 when empty
 
@@ -72,6 +105,22 @@ export default function LocationSearchInput({
         loc.address.toLowerCase().includes(searchTerm)
     ).slice(0, 8);
   }, [query]);
+
+  // Combine Google Places and preset locations
+  const allLocations = useMemo(() => {
+    // If Google Places returned results, prioritize them
+    if (googlePlaces.length > 0) {
+      const googleAsCustom: CustomLocation[] = googlePlaces.map(place => ({
+        id: place.placeId,
+        name: place.name,
+        address: place.address,
+        coordinates: place.coordinates,
+      }));
+      return googleAsCustom;
+    }
+    // Otherwise show preset locations
+    return filteredLocations;
+  }, [googlePlaces, filteredLocations]);
 
   // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -184,13 +233,25 @@ export default function LocationSearchInput({
           ref={dropdownRef}
           className="absolute z-50 w-full mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg max-h-72 overflow-y-auto"
         >
-          {/* Preset locations */}
-          {filteredLocations.length > 0 && !showCustomInput && (
+          {/* Loading indicator */}
+          {isSearching && (
+            <div className="px-4 py-6 text-center">
+              <div className="animate-spin w-6 h-6 border-2 border-violet-500 border-t-transparent rounded-full mx-auto mb-2" />
+              <p className="text-sm text-slate-500">
+                {language === 'id' ? 'Mencari lokasi...' : 'Searching locations...'}
+              </p>
+            </div>
+          )}
+
+          {/* Results */}
+          {!isSearching && allLocations.length > 0 && !showCustomInput && (
             <>
               <div className="px-3 py-2 text-xs font-medium text-slate-500 uppercase bg-slate-50 dark:bg-slate-900/50">
-                {language === 'id' ? 'Lokasi Populer' : 'Popular Locations'}
+                {googlePlaces.length > 0
+                  ? (language === 'id' ? 'Hasil dari Google Maps' : 'Results from Google Maps')
+                  : (language === 'id' ? 'Lokasi Populer' : 'Popular Locations')}
               </div>
-              {filteredLocations.map((location) => (
+              {allLocations.map((location) => (
                 <button
                   key={location.id}
                   onClick={() => handleSelectPlace(location)}
@@ -213,7 +274,7 @@ export default function LocationSearchInput({
           )}
 
           {/* No results message */}
-          {filteredLocations.length === 0 && query.length >= 2 && !showCustomInput && (
+          {!isSearching && allLocations.length === 0 && query.length >= 3 && !showCustomInput && (
             <div className="px-4 py-4 text-center text-slate-500">
               <p className="text-sm mb-2">
                 {language === 'id' ? 'Lokasi tidak ditemukan' : 'Location not found'}
@@ -228,7 +289,7 @@ export default function LocationSearchInput({
           )}
 
           {/* Custom address entry option */}
-          {!showCustomInput && filteredLocations.length > 0 && (
+          {!isSearching && !showCustomInput && allLocations.length > 0 && (
             <button
               onClick={() => setShowCustomInput(true)}
               className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors border-t border-slate-200 dark:border-slate-600"

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { DayPlan } from '@/types/life';
 import { Language, WeatherData } from '@/types';
 import TimeSlider, { TimeComparisonCards } from './TimeSlider';
@@ -76,8 +76,28 @@ export default function TodayView({
   weatherData,
   onRerouteHome,
 }: TodayViewProps) {
-  // User's selected departure time
-  const [selectedTime, setSelectedTime] = useState('17:30');
+  // Extract values from todayPlan (may be null)
+  const activity = todayPlan?.activity;
+  const destination = todayPlan?.destination;
+  const rec = todayPlan?.recommendation;
+  const scheduledTime = activity?.scheduledTime || '18:00';
+
+  // Parse scheduled time to calculate dynamic time ranges
+  const [schedHours, schedMins] = scheduledTime.split(':').map(Number);
+  const scheduledMinutes = schedHours * 60 + schedMins;
+  const baseDuration = rec?.duration || 35;
+
+  // Calculate optimal departure time (scheduled time - base duration - buffer)
+  const optimalDepartureMinutes = scheduledMinutes - baseDuration - 15; // 15 min buffer
+  const optimalDepartureTime = `${Math.floor(optimalDepartureMinutes / 60).toString().padStart(2, '0')}:${(optimalDepartureMinutes % 60).toString().padStart(2, '0')}`;
+
+  // User's selected departure time - default to optimal time
+  const [selectedTime, setSelectedTime] = useState(optimalDepartureTime);
+
+  // Update selected time when activity changes
+  useEffect(() => {
+    setSelectedTime(optimalDepartureTime);
+  }, [optimalDepartureTime]);
 
   // Get weather impact - must be called before any early returns
   const weatherImpact = useMemo(() => {
@@ -89,29 +109,33 @@ export default function TodayView({
   const weatherIcon = weatherData ? getWeatherIcon(weatherData.condition) : '☀️';
   const weatherBadge = weatherData ? formatWeatherImpactBadge(weatherData.condition, language) : null;
 
-  // Extract values from todayPlan (may be null)
-  const activity = todayPlan?.activity;
-  const destination = todayPlan?.destination;
-  const rec = todayPlan?.recommendation;
-
-  // Fixed comparison times using real weather data - must be called before any early returns
+  // Dynamic comparison times based on scheduled activity time - must be called before any early returns
   const timeComparisons = useMemo(() => {
-    const baseDuration = rec?.duration || 35;
     const weatherMultiplier = weatherImpact.multiplier;
 
-    // Fixed time slots for comparison
-    const fixedTimes = [
-      { time: '17:00', trafficLevel: 'moderate' as const, isPeak: true },
-      { time: '17:45', trafficLevel: 'light' as const, isPeak: false },
-      { time: '18:30', trafficLevel: 'heavy' as const, isPeak: true },
+    // Calculate dynamic time slots relative to scheduled time
+    const earlyDepartureMinutes = scheduledMinutes - baseDuration - 30; // 30 min early
+    const optimalDepartureMinutes = scheduledMinutes - baseDuration - 15; // 15 min buffer
+    const lateDepartureMinutes = scheduledMinutes - baseDuration; // Exactly on time (no buffer)
+
+    const formatTime = (mins: number) => {
+      const h = Math.floor(mins / 60);
+      const m = mins % 60;
+      return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+    };
+
+    const dynamicTimes = [
+      { time: formatTime(earlyDepartureMinutes), trafficLevel: 'light' as const, isPeak: false, label: 'early' },
+      { time: formatTime(optimalDepartureMinutes), trafficLevel: 'moderate' as const, isPeak: false, label: 'optimal' },
+      { time: formatTime(lateDepartureMinutes), trafficLevel: 'heavy' as const, isPeak: true, label: 'late' },
     ];
 
     // Optimal time - leave earlier if bad weather
-    const optimalTime = isRainy ? '17:00' : '17:45';
+    const optimalTime = isRainy ? dynamicTimes[0].time : dynamicTimes[1].time;
 
-    return fixedTimes.map((slot) => {
+    return dynamicTimes.map((slot) => {
       // Apply both traffic and weather multipliers
-      const trafficMultiplier = slot.isPeak ? 1.6 : 0.9;
+      const trafficMultiplier = slot.isPeak ? 1.6 : (slot.label === 'early' ? 0.8 : 0.9);
       const duration = Math.round(baseDuration * trafficMultiplier * weatherMultiplier);
 
       return {
@@ -121,7 +145,7 @@ export default function TodayView({
         trafficLevel: slot.trafficLevel,
       };
     });
-  }, [weatherImpact.multiplier, rec?.duration, isRainy]);
+  }, [weatherImpact.multiplier, baseDuration, scheduledMinutes, isRainy]);
 
   // Get recommendation for the currently selected time - must be called before any early returns
   const selectedTimeRecommendation = useMemo(() => {
@@ -162,7 +186,6 @@ export default function TodayView({
 
   // Get arrival time and status for current selection
   const arrivalTime = calculateArrival(bestOption.departureTime, bestOption.duration);
-  const scheduledTime = activity?.scheduledTime || '18:00';
   const arrivalStatus = getArrivalStatus(arrivalTime, scheduledTime, language);
 
   // Weekend message - now AFTER all hooks
@@ -229,8 +252,12 @@ export default function TodayView({
       <div className="p-6 bg-slate-50 dark:bg-slate-800/50">
         <div className="max-w-2xl mx-auto">
           <TimeSlider
-            earliestTime="17:00"
-            latestTime="20:00"
+            earliestTime={(() => {
+              // Calculate earliest time: 90 minutes before scheduled time
+              const earliestMinutes = scheduledMinutes - baseDuration - 60;
+              return `${Math.floor(earliestMinutes / 60).toString().padStart(2, '0')}:${(earliestMinutes % 60).toString().padStart(2, '0')}`;
+            })()}
+            latestTime={scheduledTime}
             selectedTime={selectedTime}
             onTimeChange={setSelectedTime}
             language={language}
