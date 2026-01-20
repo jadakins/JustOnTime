@@ -173,8 +173,8 @@ export function generateRouteData(fromRegion: string, toRegion: string): RouteDa
   // const trafficData = generateTrafficData();
 
   // Placeholder for commented out mock data
-  const floodData = [];
-  const trafficData = [];
+  const floodData: FloodData[] = [];
+  const trafficData: TrafficData[] = [];
 
   const fromFlood = floodData.find(f => f.regionId === fromRegion);
   const toFlood = floodData.find(f => f.regionId === toRegion);

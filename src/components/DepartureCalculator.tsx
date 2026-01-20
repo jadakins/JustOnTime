@@ -68,7 +68,7 @@ export default function DepartureCalculator({ language }: DepartureCalculatorPro
   }, [timeMinutes, homeRegion, officeRegion, tripDirection]);
 
   const timePeriod = getTimePeriod(timeMinutes);
-  const bestRecommendation = recommendations[0];
+  const bestRecommendation: DepartureRecommendation | undefined = recommendations[0] as DepartureRecommendation | undefined;
 
   return (
     <div className="card h-full flex flex-col">

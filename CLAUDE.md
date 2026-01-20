@@ -48,7 +48,6 @@ All types in `src/types/index.ts`. Key types: `FloodData`, `TrafficData`, `Weath
 - **Routes**: Use `fetchRouteWithPolyline()` from `src/services/googleMapsApi.ts` (Google Maps API)
 - **Flood Data**: Will be integrated with real-time flood sensors (TBD)
 
-Do not import or call functions from `src/data/mockData.ts`. If API calls fail, return empty/null data rather than falling back to mock data.
 
 ### Adding Regions
 Edit `src/data/regions.ts` - add new entry to `jakartaRegions` array with coordinates and flood zones.
