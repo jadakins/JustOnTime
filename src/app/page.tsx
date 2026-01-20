@@ -68,6 +68,33 @@ export default function LifeInJakarta() {
     coordinates: homeConfig.coordinates,
   });
 
+  // Update all "home" activities when home location changes
+  useEffect(() => {
+    setWeeklyPlan(prevPlan => {
+      return prevPlan.map(day => {
+        // Only update if this activity goes to 'home'
+        if (day.destination?.id === 'home') {
+          const updatedHomeDestination = {
+            id: 'home',
+            name: homeLocation.name,
+            nameId: homeLocation.name,
+            shortAddress: homeLocation.address.split(',')[0] || homeLocation.address,
+            fullAddress: homeLocation.address,
+            coordinates: homeLocation.coordinates,
+            icon: '🏠',
+            category: 'home' as const,
+          };
+
+          return {
+            ...day,
+            destination: updatedHomeDestination,
+          };
+        }
+        return day;
+      });
+    });
+  }, [homeLocation]);
+
   // Initialize on client mount to avoid hydration mismatch
   useEffect(() => {
     setIsClient(true);
@@ -111,8 +138,22 @@ export default function LifeInJakarta() {
             category: 'other' as const,
           };
         } else if (updates.destinationId) {
-          // If destinationId changed, get that destination
-          newDestination = getDestinationById(updates.destinationId) || day.destination;
+          // If destinationId is 'home', use current homeLocation state
+          if (updates.destinationId === 'home') {
+            newDestination = {
+              id: 'home',
+              name: homeLocation.name,
+              nameId: homeLocation.name,
+              shortAddress: homeLocation.address.split(',')[0] || homeLocation.address,
+              fullAddress: homeLocation.address,
+              coordinates: homeLocation.coordinates,
+              icon: '🏠',
+              category: 'home' as const,
+            };
+          } else {
+            // Otherwise, get that destination from saved destinations
+            newDestination = getDestinationById(updates.destinationId) || day.destination;
+          }
         }
 
         // Update the activity
@@ -128,7 +169,7 @@ export default function LifeInJakarta() {
         };
       });
     });
-  }, []);
+  }, [homeLocation]);
 
   // Comparison data
   const comparison = useMemo(() => {
