@@ -20,7 +20,7 @@ npm run lint         # Run ESLint
 ## Architecture
 
 ### Data Flow
-Mock data generators in `src/data/mockData.ts` simulate real-time data. The main page (`src/app/page.tsx`) fetches data on mount and refreshes every 30 seconds. Data flows down to components via props.
+Real APIs are used for all data fetching. The main page (`src/app/page.tsx`) fetches data from Google Maps API, WeatherAPI.com, and other real-time sources on mount and refreshes every 30 seconds. Data flows down to components via props. **Do not use mock data** - all data must come from real APIs.
 
 ### Component Structure
 - `Header` - Language toggle (ID/EN), timestamp display
@@ -41,11 +41,14 @@ All types in `src/types/index.ts`. Key types: `FloodData`, `TrafficData`, `Weath
 
 ## Key Implementation Details
 
-### Mock Data Replacement
-To integrate real APIs, modify functions in `src/data/mockData.ts`:
-- `generateFloodData()` → Connect to BMKG or Jakarta Smart City flood sensors
-- `generateTrafficData()` → Connect to Google Maps or HERE Traffic API
-- `generateWeatherData()` → Connect to BMKG or OpenWeatherMap
+### ⚠️ No Mock Data Rule
+**Never use mock data generators.** All data must come from real APIs:
+- **Weather**: Use `fetchWeatherData()` from `src/services/weatherApi.ts` (WeatherAPI.com)
+- **Traffic**: Use `fetchTrafficData()` from `src/services/googleMapsApi.ts` (Google Maps API)
+- **Routes**: Use `fetchRouteWithPolyline()` from `src/services/googleMapsApi.ts` (Google Maps API)
+- **Flood Data**: Will be integrated with real-time flood sensors (TBD)
+
+Do not import or call functions from `src/data/mockData.ts`. If API calls fail, return empty/null data rather than falling back to mock data.
 
 ### Adding Regions
 Edit `src/data/regions.ts` - add new entry to `jakartaRegions` array with coordinates and flood zones.

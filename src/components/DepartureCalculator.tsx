@@ -4,7 +4,8 @@ import { useState, useMemo, useEffect } from 'react';
 import { Language, TripDirection, DepartureRecommendation, SeverityLevel } from '@/types';
 import { useTranslations } from '@/i18n/translations';
 import { jakartaRegions, getRegionName } from '@/data/regions';
-import { generateDepartureRecommendations } from '@/data/mockData';
+// COMMENTED OUT: Mock data import - using real APIs instead
+// import { generateDepartureRecommendations } from '@/data/mockData';
 import { format, setHours, setMinutes } from 'date-fns';
 
 // ============================================================================
@@ -58,10 +59,12 @@ export default function DepartureCalculator({ language }: DepartureCalculatorPro
   };
 
   // Auto-generate recommendations when inputs change
+  // COMMENTED OUT: Mock data - using real APIs instead
   const recommendations = useMemo(() => {
     const fromRegion = tripDirection === 'home-to-office' ? homeRegion : officeRegion;
     const toRegion = tripDirection === 'home-to-office' ? officeRegion : homeRegion;
-    return generateDepartureRecommendations(parseMinutesToDate(timeMinutes), fromRegion, toRegion, 4);
+    // return generateDepartureRecommendations(parseMinutesToDate(timeMinutes), fromRegion, toRegion, 4);
+    return [];
   }, [timeMinutes, homeRegion, officeRegion, tripDirection]);
 
   const timePeriod = getTimePeriod(timeMinutes);

@@ -168,9 +168,13 @@ export function generateRouteData(fromRegion: string, toRegion: string): RouteDa
   const baseDistance = 15; // Base 15km
   const baseDuration = 30; // Base 30 minutes
 
-  // Adjust based on traffic and flood conditions
-  const floodData = generateFloodData();
-  const trafficData = generateTrafficData();
+  // COMMENTED OUT: Adjust based on traffic and flood conditions
+  // const floodData = generateFloodData();
+  // const trafficData = generateTrafficData();
+
+  // Placeholder for commented out mock data
+  const floodData = [];
+  const trafficData = [];
 
   const fromFlood = floodData.find(f => f.regionId === fromRegion);
   const toFlood = floodData.find(f => f.regionId === toRegion);
@@ -220,8 +224,9 @@ export function generateDepartureRecommendations(
   count: number = 5
 ) {
   const recommendations = [];
-  const floodData = generateFloodData();
-  const trafficData = generateTrafficData();
+  // COMMENTED OUT: Mock data generators - using real APIs instead
+  // const floodData = generateFloodData();
+  // const trafficData = generateTrafficData();
 
   for (let i = 0; i < count; i++) {
     const departureTime = addMinutes(earliestTime, i * 30);

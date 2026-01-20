@@ -12,11 +12,12 @@ import {
   OfficeLocationEditor,
 } from '@/components';
 import ActivitySetupModal from '@/components/ActivitySetupModal';
-import {
-  generateFloodData,
-  generateTrafficData,
-  generateWeatherData,
-} from '@/data/mockData';
+// COMMENTED OUT: Mock data imports - using real APIs instead
+// import {
+//   generateFloodData,
+//   generateTrafficData,
+//   generateWeatherData,
+// } from '@/data/mockData';
 import { fetchWeatherData } from '@/services/weatherApi';
 import { fetchTrafficData, fetchRouteWithPolyline, getGoogleMapsUrl } from '@/services/googleMapsApi';
 import { generateWeeklyPlan, generateComparisonData, getDestinationById } from '@/data/lifeData';
@@ -107,10 +108,10 @@ export default function LifeInJakarta() {
   // Initialize on client mount to avoid hydration mismatch
   useEffect(() => {
     setIsClient(true);
-    // Set initial mock data on client side only
-    setFloodData(generateFloodData());
-    setTrafficData(generateTrafficData());
-    setWeatherData(generateWeatherData());
+    // COMMENTED OUT: Set initial mock data on client side only
+    // setFloodData(generateFloodData());
+    // setTrafficData(generateTrafficData());
+    // setWeatherData(generateWeatherData());
   }, []);
 
   // Initialize weekly plan on mount and when language changes
@@ -192,8 +193,9 @@ export default function LifeInJakarta() {
       const realWeather = await fetchWeatherData();
       setWeatherData(realWeather);
     } catch (error) {
-      console.warn('Failed to fetch real weather data, using mock:', error);
-      setWeatherData(generateWeatherData());
+      console.warn('Failed to fetch real weather data:', error);
+      // COMMENTED OUT: Mock data fallback
+      // setWeatherData(generateWeatherData());
     }
 
     // Fetch traffic data from Google Maps
@@ -201,12 +203,13 @@ export default function LifeInJakarta() {
       const realTraffic = await fetchTrafficData();
       setTrafficData(realTraffic);
     } catch (error) {
-      console.warn('Failed to fetch real traffic data, using mock:', error);
-      setTrafficData(generateTrafficData());
+      console.warn('Failed to fetch real traffic data:', error);
+      // COMMENTED OUT: Mock data fallback
+      // setTrafficData(generateTrafficData());
     }
 
-    // Flood data remains mock for now (no real-time flood API integrated)
-    setFloodData(generateFloodData());
+    // COMMENTED OUT: Flood data remains mock for now (no real-time flood API integrated)
+    // setFloodData(generateFloodData());
 
     setLastUpdated(new Date());
   }, []);
