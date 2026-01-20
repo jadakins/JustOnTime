@@ -3,8 +3,8 @@
 import { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import { Language } from '@/types';
-import { Destination, DayPlan, RouteDisplayData } from '@/types/life';
-import { officeConfig, homeConfig } from '@/config/locations';
+import { Destination, DayPlan, RouteDisplayData, CustomLocation } from '@/types/life';
+import { officeConfig } from '@/config/locations';
 
 // ============================================================================
 // LIFE MAP - SIMPLIFIED MAP VIEW
@@ -17,6 +17,7 @@ interface LifeMapProps {
   selectedDay: number | null;
   weeklyPlan: DayPlan[];
   routeData?: RouteDisplayData | null;
+  homeLocation: CustomLocation;
 }
 
 // Marker colors
@@ -38,6 +39,7 @@ export default function LifeMap({
   selectedDay,
   weeklyPlan,
   routeData,
+  homeLocation,
 }: LifeMapProps) {
   const mapRef = useRef<L.Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -94,6 +96,18 @@ export default function LifeMap({
     routeSegmentsRef.current.forEach(segment => segment.remove());
     routeSegmentsRef.current = [];
 
+    // Convert homeLocation (CustomLocation) to Destination format
+    const homeDestination: Destination = {
+      id: homeLocation.id,
+      name: homeLocation.name,
+      nameId: homeLocation.name,
+      shortAddress: homeLocation.address.split(',')[0] || homeLocation.address,
+      fullAddress: homeLocation.address,
+      coordinates: homeLocation.coordinates,
+      icon: '🏠',
+      category: 'home',
+    };
+
     // 1. Add Office marker (always visible, prominent)
     const officeIcon = createOfficeIcon();
     const officeMarker = L.marker(officeConfig.coordinates, { icon: officeIcon })
@@ -102,10 +116,10 @@ export default function LifeMap({
     markersRef.current.push(officeMarker);
 
     // 2. Add Home marker (always visible)
-    const homeIcon = createDestinationIcon(homeConfig, activeDayPlan?.destination?.id === 'home');
-    const homeMarker = L.marker(homeConfig.coordinates, { icon: homeIcon })
+    const homeIcon = createDestinationIcon(homeDestination, activeDayPlan?.destination?.id === 'home');
+    const homeMarker = L.marker(homeDestination.coordinates, { icon: homeIcon })
       .addTo(mapRef.current)
-      .bindPopup(createDestinationPopup(homeConfig, language));
+      .bindPopup(createDestinationPopup(homeDestination, language));
     markersRef.current.push(homeMarker);
 
     // 3. Add active destination marker (only if not home and exists)
@@ -167,10 +181,10 @@ export default function LifeMap({
       }
     } else {
       // No destination - just show office and home
-      const bounds = L.latLngBounds([officeConfig.coordinates, homeConfig.coordinates]);
+      const bounds = L.latLngBounds([officeConfig.coordinates, homeLocation.coordinates]);
       mapRef.current.fitBounds(bounds, { padding: [60, 60] });
     }
-  }, [language, selectedDay, weeklyPlan, routeData, activeDayPlan, today]);
+  }, [language, selectedDay, weeklyPlan, routeData, activeDayPlan, today, homeLocation]);
 
   return (
     <div

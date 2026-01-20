@@ -15,5 +15,6 @@ export { default as MapView } from './MapView';
 export { default as MyWeek } from './MyWeek';
 export { default as TodayView } from './TodayView';
 export { default as TimeSlider, TimeComparisonCards } from './TimeSlider';
+export { default as HomeLocationEditor } from './HomeLocationEditor';
 // NOTE: LifeMap is NOT exported here to avoid SSR issues with Leaflet
 // Import it directly with dynamic() in your page: import('@/components/LifeMap')

@@ -8,6 +8,7 @@ import {
   Header,
   MyWeek,
   TodayView,
+  HomeLocationEditor,
 } from '@/components';
 import ActivitySetupModal from '@/components/ActivitySetupModal';
 import {
@@ -18,7 +19,8 @@ import {
 import { fetchWeatherData } from '@/services/weatherApi';
 import { fetchTrafficData, fetchRouteWithPolyline, getGoogleMapsUrl } from '@/services/googleMapsApi';
 import { generateWeeklyPlan, generateComparisonData, getDestinationById } from '@/data/lifeData';
-import { officeConfig } from '@/config/locations';
+import { officeConfig, homeConfig } from '@/config/locations';
+import { CustomLocation } from '@/types/life';
 
 // Dynamic import for map to avoid SSR issues
 const LifeMap = dynamic(() => import('@/components/LifeMap'), {
@@ -57,6 +59,14 @@ export default function LifeInJakarta() {
 
   // Route data for map display
   const [routeData, setRouteData] = useState<RouteDisplayData | null>(null);
+
+  // Home location state - editable by user
+  const [homeLocation, setHomeLocation] = useState<CustomLocation>({
+    id: homeConfig.id,
+    name: homeConfig.name,
+    address: homeConfig.fullAddress,
+    coordinates: homeConfig.coordinates,
+  });
 
   // Initialize on client mount to avoid hydration mismatch
   useEffect(() => {
@@ -290,6 +300,19 @@ export default function LifeInJakarta() {
           <LiveConditions weatherData={weatherData} language={language} />
         </div>
 
+        {/* Home Location Editor */}
+        <div className="mb-6">
+          <HomeLocationEditor
+            language={language}
+            homeLocation={homeLocation}
+            onHomeLocationChange={(location) => {
+              if (location) {
+                setHomeLocation(location);
+              }
+            }}
+          />
+        </div>
+
         {/* Hero Section - Today's Plan */}
         <div className="mb-6">
           <TodayView
@@ -343,6 +366,7 @@ export default function LifeInJakarta() {
                   selectedDay={selectedDay}
                   weeklyPlan={weeklyPlan}
                   routeData={routeData}
+                  homeLocation={homeLocation}
                 />
 
                 {/* Map Legend - Comprehensive */}
