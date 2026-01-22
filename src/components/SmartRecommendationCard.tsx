@@ -111,29 +111,29 @@ export default function SmartRecommendationCard({
         </div>
 
         {/* Departure → Arrival flow */}
-        {/* Mobile: Vertical stack */}
-        <div className="flex flex-col items-center gap-3 sm:hidden">
+        {/* Mobile: Vertical stack - Compact mobile layout */}
+        <div className="flex flex-col items-center gap-1.5 sm:hidden w-full max-w-full">
           {/* Departure */}
-          <div className="text-center">
-            <p className="text-xs opacity-80 mb-1">{language === 'id' ? 'Berangkat' : 'Leave'}</p>
-            <p className="text-2xl font-bold">{recommendation.departureTime}</p>
+          <div className="text-center w-full px-1">
+            <p className="text-[9px] opacity-75 mb-0 uppercase tracking-tight font-semibold">{language === 'id' ? 'Berangkat' : 'Leave'}</p>
+            <p className="text-lg font-bold leading-tight">{recommendation.departureTime}</p>
           </div>
 
           {/* Duration indicator - vertical line */}
-          <div className="flex flex-col items-center gap-1">
-            <div className="w-0.5 h-4 bg-white/40" />
-            <div className="bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full flex items-center gap-1.5">
-              <span className="text-sm">🚗</span>
-              <span className="font-bold text-base">{recommendation.duration}</span>
-              <span className="text-xs opacity-80">{language === 'id' ? 'mnt' : 'min'}</span>
+          <div className="flex flex-col items-center gap-0.5 py-0.5">
+            <div className="w-0.5 h-2 bg-white/40" />
+            <div className="bg-white/20 backdrop-blur-sm px-2 py-0.5 rounded-full flex items-center gap-0.5 text-center">
+              <span className="text-[10px]">🚗</span>
+              <span className="font-bold text-[11px]">{recommendation.duration}</span>
+              <span className="text-[8px] opacity-75">{language === 'id' ? 'mnt' : 'min'}</span>
             </div>
-            <div className="w-0.5 h-4 bg-white/40" />
+            <div className="w-0.5 h-2 bg-white/40" />
           </div>
 
           {/* Arrival */}
-          <div className="text-center">
-            <p className="text-xs opacity-80 mb-1">{language === 'id' ? 'Tiba' : 'Arrive'}</p>
-            <p className="text-2xl font-bold">{recommendation.arrivalTime}</p>
+          <div className="text-center w-full px-1">
+            <p className="text-[9px] opacity-75 mb-0 uppercase tracking-tight font-semibold">{language === 'id' ? 'Tiba' : 'Arrive'}</p>
+            <p className="text-lg font-bold leading-tight">{recommendation.arrivalTime}</p>
           </div>
         </div>
 
