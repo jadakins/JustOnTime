@@ -16,7 +16,7 @@ export const officeConfig: OfficeConfig = {
   nameId: 'Sinarmas MSIG',
   fullAddress: 'Sinarmas MSIG Jl. Jenderal Sudirman No.21 Lt.7 Kav, RT.10/RW.1, Kuningan, Karet, Kecamatan Setiabudi, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12920, Indonesia',
   shortAddress: 'Sinarmas MSIG, Sudirman',
-  coordinates: [-6.2088, 106.8199],
+  coordinates: [-6.210336881136443, 106.82226110946749],
   // Branding - customize for your company
   companyName: 'Sinarmas MSIG',
   icon: '🏢',
