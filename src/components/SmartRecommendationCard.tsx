@@ -94,8 +94,8 @@ export default function SmartRecommendationCard({
   return (
     <div className="card overflow-hidden">
       {/* Main recommendation */}
-      <div className="bg-gradient-to-r from-sky-500 to-blue-600 p-4 sm:p-6 text-white">
-        <div className="flex items-center justify-between mb-4 gap-2 min-w-0">
+      <div className="bg-gradient-to-r from-sky-500 to-blue-600 p-3 sm:p-6 text-white overflow-hidden">
+        <div className="flex items-center justify-between mb-2 sm:mb-4 gap-2 min-w-0">
           <div className="flex items-center gap-2 min-w-0 flex-1">
             <span className="text-xl sm:text-2xl flex-shrink-0">✨</span>
             <h3 className="font-semibold text-sm sm:text-base truncate">
@@ -114,9 +114,9 @@ export default function SmartRecommendationCard({
         {/* Mobile: Vertical stack - Compact mobile layout */}
         <div className="flex flex-col items-center gap-1.5 sm:hidden w-full max-w-full">
           {/* Departure */}
-          <div className="text-center w-full px-1">
+          <div className="text-center w-full">
             <p className="text-[9px] opacity-75 mb-0 uppercase tracking-tight font-semibold">{language === 'id' ? 'Berangkat' : 'Leave'}</p>
-            <p className="text-lg font-bold leading-tight">{recommendation.departureTime}</p>
+            <p className="text-base font-bold leading-tight">{recommendation.departureTime}</p>
           </div>
 
           {/* Duration indicator - vertical line */}
@@ -131,9 +131,9 @@ export default function SmartRecommendationCard({
           </div>
 
           {/* Arrival */}
-          <div className="text-center w-full px-1">
+          <div className="text-center w-full">
             <p className="text-[9px] opacity-75 mb-0 uppercase tracking-tight font-semibold">{language === 'id' ? 'Tiba' : 'Arrive'}</p>
-            <p className="text-lg font-bold leading-tight">{recommendation.arrivalTime}</p>
+            <p className="text-base font-bold leading-tight">{recommendation.arrivalTime}</p>
           </div>
         </div>
 
