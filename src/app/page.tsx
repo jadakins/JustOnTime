@@ -837,41 +837,41 @@ function LiveConditions({ weatherData, language }: { weatherData: WeatherData; l
   const conditionLabel = conditionLabels[weatherData.condition] || conditionLabels['sunny'];
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex flex-wrap items-center gap-2 sm:gap-3">
       {/* Time */}
-      <div className="flex items-center gap-2 bg-white dark:bg-slate-800 px-4 py-2 rounded-xl shadow-sm">
-        <span className="text-2xl">🕐</span>
-        <div>
-          <p className="text-lg font-bold text-slate-800 dark:text-white">
+      <div className="flex items-center gap-2 bg-white dark:bg-slate-800 px-3 sm:px-4 py-2 rounded-xl shadow-sm">
+        <span className="text-xl sm:text-2xl flex-shrink-0">🕐</span>
+        <div className="min-w-0">
+          <p className="text-base sm:text-lg font-bold text-slate-800 dark:text-white whitespace-nowrap">
             {currentTime}
           </p>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-500 whitespace-nowrap">
             {language === 'id' ? 'Waktu Lokal' : 'Local Time'}
           </p>
         </div>
       </div>
 
       {/* Weather */}
-      <div className="flex items-center gap-2 bg-white dark:bg-slate-800 px-4 py-2 rounded-xl shadow-sm">
-        <span className="text-2xl">{weatherIcon}</span>
-        <div>
-          <p className="text-lg font-bold text-slate-800 dark:text-white">
+      <div className="flex items-center gap-2 bg-white dark:bg-slate-800 px-3 sm:px-4 py-2 rounded-xl shadow-sm">
+        <span className="text-xl sm:text-2xl flex-shrink-0">{weatherIcon}</span>
+        <div className="min-w-0">
+          <p className="text-base sm:text-lg font-bold text-slate-800 dark:text-white whitespace-nowrap">
             {Math.round(weatherData.temperature)}°C
           </p>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-500 truncate max-w-[80px] sm:max-w-none">
             {language === 'id' ? conditionLabel.id : conditionLabel.en}
           </p>
         </div>
       </div>
 
       {/* Traffic */}
-      <div className="flex items-center gap-2 bg-white dark:bg-slate-800 px-4 py-2 rounded-xl shadow-sm">
-        <span className="text-2xl">{traffic.icon}</span>
-        <div>
-          <p className="text-sm font-semibold text-slate-800 dark:text-white">
+      <div className="flex items-center gap-2 bg-white dark:bg-slate-800 px-3 sm:px-4 py-2 rounded-xl shadow-sm">
+        <span className="text-xl sm:text-2xl flex-shrink-0">{traffic.icon}</span>
+        <div className="min-w-0">
+          <p className="text-sm font-semibold text-slate-800 dark:text-white whitespace-nowrap">
             {traffic.label}
           </p>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-500 whitespace-nowrap">
             {language === 'id' ? 'Lalu Lintas' : 'Traffic'}
           </p>
         </div>
