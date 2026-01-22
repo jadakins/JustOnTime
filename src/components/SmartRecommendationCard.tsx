@@ -94,72 +94,73 @@ export default function SmartRecommendationCard({
   return (
     <div className="card overflow-hidden">
       {/* Main recommendation */}
-      <div className="bg-gradient-to-r from-sky-500 to-blue-600 p-6 text-white">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl">✨</span>
-            <h3 className="font-semibold">
+      <div className="bg-gradient-to-r from-sky-500 to-blue-600 p-4 sm:p-6 text-white">
+        <div className="flex items-center justify-between mb-4 gap-2 min-w-0">
+          <div className="flex items-center gap-2 min-w-0 flex-1">
+            <span className="text-xl sm:text-2xl flex-shrink-0">✨</span>
+            <h3 className="font-semibold text-sm sm:text-base truncate">
               {language === 'id' ? 'Rekomendasi Keberangkatan' : 'Departure Recommendation'}
             </h3>
           </div>
           {weatherBadge && (
-            <div className={`px-3 py-1 rounded-full text-xs font-medium ${weatherBadge.color}`}>
-              {weatherIcon} {weatherBadge.text}
+            <div className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium flex-shrink-0 ${weatherBadge.color}`}>
+              <span className="hidden sm:inline">{weatherIcon} {weatherBadge.text}</span>
+              <span className="sm:hidden">{weatherIcon}</span>
             </div>
           )}
         </div>
 
         {/* Departure → Arrival flow */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-2 min-w-0">
           {/* Departure */}
-          <div className="text-center">
-            <p className="text-sm opacity-80 mb-1">
+          <div className="text-center flex-shrink-0">
+            <p className="text-xs sm:text-sm opacity-80 mb-1 whitespace-nowrap">
               {language === 'id' ? 'Berangkat' : 'Leave'}
             </p>
-            <p className="text-4xl font-bold">{recommendation.departureTime}</p>
+            <p className="text-2xl sm:text-4xl font-bold whitespace-nowrap">{recommendation.departureTime}</p>
           </div>
 
           {/* Duration indicator */}
-          <div className="flex-1 flex flex-col items-center px-4">
-            <div className="flex items-center gap-2 w-full">
-              <div className="h-0.5 flex-1 bg-white/40" />
-              <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-2">
-                <span>🚗</span>
-                <span className="font-bold">{recommendation.duration}</span>
-                <span className="text-sm opacity-80">{language === 'id' ? 'mnt' : 'min'}</span>
+          <div className="flex-1 flex flex-col items-center px-2 sm:px-4 min-w-0">
+            <div className="flex items-center gap-1 sm:gap-2 w-full min-w-0">
+              <div className="h-0.5 flex-1 bg-white/40 min-w-[20px]" />
+              <div className="bg-white/20 backdrop-blur-sm px-2 sm:px-3 py-1 rounded-full flex items-center gap-1 sm:gap-2 flex-shrink-0">
+                <span className="text-sm sm:text-base">🚗</span>
+                <span className="font-bold text-sm sm:text-base">{recommendation.duration}</span>
+                <span className="text-xs sm:text-sm opacity-80">{language === 'id' ? 'mnt' : 'min'}</span>
               </div>
-              <div className="h-0.5 flex-1 bg-white/40" />
+              <div className="h-0.5 flex-1 bg-white/40 min-w-[20px]" />
             </div>
             {weatherDelayText && (
-              <p className="text-xs opacity-80 mt-1">{weatherDelayText}</p>
+              <p className="text-xs opacity-80 mt-1 text-center truncate max-w-full">{weatherDelayText}</p>
             )}
           </div>
 
           {/* Arrival */}
-          <div className="text-center">
-            <p className="text-sm opacity-80 mb-1">
+          <div className="text-center flex-shrink-0">
+            <p className="text-xs sm:text-sm opacity-80 mb-1 whitespace-nowrap">
               {language === 'id' ? 'Tiba' : 'Arrive'}
             </p>
-            <p className="text-4xl font-bold">{recommendation.arrivalTime}</p>
+            <p className="text-2xl sm:text-4xl font-bold whitespace-nowrap">{recommendation.arrivalTime}</p>
           </div>
         </div>
       </div>
 
       {/* Destination details */}
-      <div className="p-6">
-        <div className="flex items-start gap-4">
-          <div className="w-14 h-14 rounded-xl bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center flex-shrink-0">
-            <span className="text-3xl">{recommendation.icon}</span>
+      <div className="p-4 sm:p-6">
+        <div className="flex items-start gap-3 sm:gap-4 min-w-0">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center flex-shrink-0">
+            <span className="text-2xl sm:text-3xl">{recommendation.icon}</span>
           </div>
-          <div className="flex-1">
-            <h4 className="font-bold text-lg text-slate-800 dark:text-white">
+          <div className="flex-1 min-w-0">
+            <h4 className="font-bold text-base sm:text-lg text-slate-800 dark:text-white truncate">
               {recommendation.destinationName}
             </h4>
-            <p className="text-sm text-slate-500 mb-2">
+            <p className="text-sm text-slate-500 mb-2 truncate">
               {recommendation.destinationAddress}
             </p>
             {recommendation.routeDescription && (
-              <p className="text-sm text-slate-600 dark:text-slate-400">
+              <p className="text-sm text-slate-600 dark:text-slate-400 break-words">
                 <span className="font-medium">
                   {language === 'id' ? 'Rute: ' : 'Route: '}
                 </span>
@@ -170,14 +171,14 @@ export default function SmartRecommendationCard({
         </div>
 
         {/* Actions */}
-        <div className="mt-6 flex gap-3">
+        <div className="mt-4 sm:mt-6 flex gap-3">
           {onOpenInMaps && (
             <button
               onClick={onOpenInMaps}
-              className="flex-1 py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white rounded-xl font-medium transition-colors flex items-center justify-center gap-2"
+              className="flex-1 py-2.5 sm:py-3 px-3 sm:px-4 bg-violet-600 hover:bg-violet-700 text-white rounded-xl font-medium transition-colors flex items-center justify-center gap-2 min-w-0"
             >
-              <span>🗺️</span>
-              <span>{language === 'id' ? 'Buka di Google Maps' : 'Open in Google Maps'}</span>
+              <span className="flex-shrink-0">🗺️</span>
+              <span className="truncate text-sm sm:text-base">{language === 'id' ? 'Buka di Google Maps' : 'Open in Google Maps'}</span>
             </button>
           )}
         </div>

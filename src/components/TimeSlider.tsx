@@ -161,7 +161,7 @@ export function TimeComparisonCards({
             key={idx}
             onClick={() => onSelectTime(comp.departureTime)}
             className={`
-              relative p-4 rounded-xl border-2 transition-all text-left
+              relative p-3 sm:p-4 rounded-xl border-2 transition-all text-left min-w-0
               ${comp.isRecommended
                 ? 'border-sky-400 bg-sky-50 dark:bg-sky-900/20 ring-2 ring-sky-400 shadow-lg'
                 : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-violet-300'
@@ -169,26 +169,26 @@ export function TimeComparisonCards({
             `}
           >
             {comp.isRecommended && (
-              <div className="absolute -top-2 -right-2 bg-sky-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+              <div className="absolute -top-2 -right-2 bg-sky-500 text-white text-xs font-bold px-2 py-0.5 rounded-full whitespace-nowrap">
                 {language === 'id' ? 'Terbaik' : 'Best'}
               </div>
             )}
 
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-lg font-bold text-slate-800 dark:text-white">
+            <div className="flex items-center justify-between mb-2 gap-2 min-w-0">
+              <span className="text-base sm:text-lg font-bold text-slate-800 dark:text-white whitespace-nowrap">
                 {comp.departureTime}
               </span>
-              <span className={`text-2xl font-bold ${
+              <span className={`text-xl sm:text-2xl font-bold flex-shrink-0 ${
                 comp.isRecommended ? 'text-sky-600' : 'text-slate-600 dark:text-slate-300'
               }`}>
                 {comp.duration}
-                <span className="text-sm font-normal ml-1">
+                <span className="text-xs sm:text-sm font-normal ml-1">
                   {language === 'id' ? 'mnt' : 'min'}
                 </span>
               </span>
             </div>
 
-            <div className={`text-xs font-medium ${trafficLabels[comp.trafficLevel].color}`}>
+            <div className={`text-xs font-medium truncate ${trafficLabels[comp.trafficLevel].color}`}>
               {language === 'id'
                 ? trafficLabels[comp.trafficLevel].id
                 : trafficLabels[comp.trafficLevel].en
