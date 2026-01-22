@@ -334,15 +334,15 @@ export default function LifeInJakarta() {
         {/* Top Bar - Office Info + Current Conditions */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           {/* Office anchor */}
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center shadow-lg">
+          <div className="flex items-center gap-3 min-w-0 flex-1 sm:flex-initial">
+            <div className="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center shadow-lg">
               <span className="text-2xl">🏢</span>
             </div>
-            <div>
+            <div className="min-w-0 flex-1 sm:flex-initial">
               <p className="text-sm text-slate-500">
                 {language === 'id' ? 'Dari Kantor' : 'From Office'}
               </p>
-              <p className="font-semibold text-slate-800 dark:text-white">
+              <p className="font-semibold text-slate-800 dark:text-white truncate max-w-full sm:max-w-xs">
                 {officeLocation.address.split(',')[0] || officeLocation.address}
               </p>
             </div>

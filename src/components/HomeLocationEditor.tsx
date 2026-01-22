@@ -25,15 +25,15 @@ export default function HomeLocationEditor({
 
   return (
     <div className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-xl p-4 border border-emerald-200 dark:border-emerald-700">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <span className="text-xl">🏠</span>
-          <div>
+      <div className="flex items-center justify-between mb-3 gap-3">
+        <div className="flex items-center gap-2 min-w-0 flex-1">
+          <span className="text-xl flex-shrink-0">🏠</span>
+          <div className="min-w-0 flex-1">
             <h3 className="text-sm font-semibold text-slate-800 dark:text-white">
               {language === 'id' ? 'Lokasi Rumah' : 'Home Location'}
             </h3>
             {!isEditing && (
-              <p className="text-xs text-slate-500 truncate max-w-[300px]">
+              <p className="text-xs text-slate-500 truncate">
                 {homeLocation.address}
               </p>
             )}
@@ -41,7 +41,7 @@ export default function HomeLocationEditor({
         </div>
         <button
           onClick={() => setIsEditing(!isEditing)}
-          className="text-sm text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300 font-medium px-3 py-1 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900/30 transition-colors"
+          className="flex-shrink-0 text-sm text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300 font-medium px-3 py-1 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900/30 transition-colors"
         >
           {isEditing
             ? (language === 'id' ? 'Batal' : 'Cancel')

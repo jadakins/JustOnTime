@@ -227,25 +227,27 @@ export default function TodayView({
       `}>
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           {/* Activity info */}
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
+          <div className="flex items-center gap-4 min-w-0 flex-1">
+            <div className="w-16 h-16 flex-shrink-0 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
               <span className="text-4xl">{destination?.icon || '🏠'}</span>
             </div>
-            <div>
+            <div className="min-w-0 flex-1">
               <p className="text-sm opacity-80 mb-1">
                 {language === 'id' ? 'Kegiatan Hari Ini' : "Today's Activity"}
               </p>
-              <h2 className="text-2xl font-bold">
+              <h2 className="text-2xl font-bold truncate">
                 {language === 'id'
                   ? activity?.activityNameId || 'Pulang ke Rumah'
                   : activity?.activityName || 'Go Home'
                 }
               </h2>
-              <p className="text-sm opacity-90 mt-1 flex items-center gap-2">
-                <span>📍</span>
-                <span>{destination?.shortAddress || 'Home'}</span>
+              <p className="text-sm opacity-90 mt-1 flex items-center gap-2 flex-wrap">
+                <span className="flex items-center gap-1">
+                  <span>📍</span>
+                  <span className="truncate max-w-[200px]">{destination?.shortAddress || 'Home'}</span>
+                </span>
                 <span className="opacity-60">•</span>
-                <span>⏰ {activity?.scheduledTime || '18:00'}</span>
+                <span className="whitespace-nowrap">⏰ {activity?.scheduledTime || '18:00'}</span>
               </p>
             </div>
           </div>

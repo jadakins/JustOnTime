@@ -25,15 +25,15 @@ export default function OfficeLocationEditor({
 
   return (
     <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-4 border border-blue-200 dark:border-blue-700">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <span className="text-xl">🏢</span>
-          <div>
+      <div className="flex items-center justify-between mb-3 gap-3">
+        <div className="flex items-center gap-2 min-w-0 flex-1">
+          <span className="text-xl flex-shrink-0">🏢</span>
+          <div className="min-w-0 flex-1">
             <h3 className="text-sm font-semibold text-slate-800 dark:text-white">
               {language === 'id' ? 'Lokasi Kantor' : 'Office Location'}
             </h3>
             {!isEditing && (
-              <p className="text-xs text-slate-500 truncate max-w-[300px]">
+              <p className="text-xs text-slate-500 truncate">
                 {officeLocation.address}
               </p>
             )}
@@ -41,7 +41,7 @@ export default function OfficeLocationEditor({
         </div>
         <button
           onClick={() => setIsEditing(!isEditing)}
-          className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium px-3 py-1 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
+          className="flex-shrink-0 text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium px-3 py-1 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
         >
           {isEditing
             ? (language === 'id' ? 'Batal' : 'Cancel')
