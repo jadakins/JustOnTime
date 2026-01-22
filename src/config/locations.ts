@@ -12,13 +12,13 @@ import { Destination, WeeklyActivity, OfficeConfig } from '@/types/life';
 // ============================================================================
 
 export const officeConfig: OfficeConfig = {
-  name: 'Office',
-  nameId: 'Kantor',
-  fullAddress: 'Jl. Jenderal Sudirman No.21 Lt.7 Kav, RT.10/RW.1, Kuningan, Karet, Kecamatan Setiabudi, Kota Jakarta Selatan',
-  shortAddress: 'Sudirman, South Jakarta',
+  name: 'Sinarmas MSIG',
+  nameId: 'Sinarmas MSIG',
+  fullAddress: 'Sinarmas MSIG Jl. Jenderal Sudirman No.21 Lt.7 Kav, RT.10/RW.1, Kuningan, Karet, Kecamatan Setiabudi, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12920, Indonesia',
+  shortAddress: 'Sinarmas MSIG, Sudirman',
   coordinates: [-6.2088, 106.8199],
   // Branding - customize for your company
-  companyName: 'Your Company',
+  companyName: 'Sinarmas MSIG',
   icon: '🏢',
 };
 

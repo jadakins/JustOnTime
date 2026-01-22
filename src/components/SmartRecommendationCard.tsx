@@ -111,17 +111,40 @@ export default function SmartRecommendationCard({
         </div>
 
         {/* Departure → Arrival flow */}
-        <div className="flex items-center justify-between gap-2 min-w-0">
-          {/* Departure */}
-          <div className="text-center flex-shrink-0">
-            <p className="text-xs sm:text-sm opacity-80 mb-1 whitespace-nowrap">
-              {language === 'id' ? 'Berangkat' : 'Leave'}
-            </p>
-            <p className="text-2xl sm:text-4xl font-bold whitespace-nowrap">{recommendation.departureTime}</p>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-2 min-w-0">
+          <div className="flex items-center justify-between sm:flex-1 gap-2 min-w-0">
+            {/* Departure */}
+            <div className="text-center">
+              <p className="text-xs sm:text-sm opacity-80 mb-1 whitespace-nowrap">
+                {language === 'id' ? 'Berangkat' : 'Leave'}
+              </p>
+              <p className="text-xl sm:text-3xl md:text-4xl font-bold whitespace-nowrap">{recommendation.departureTime}</p>
+            </div>
+
+            {/* Duration indicator - mobile horizontal */}
+            <div className="flex flex-col items-center px-2 sm:px-4 min-w-0 sm:hidden">
+              <div className="flex items-center gap-1 w-full min-w-0">
+                <div className="h-0.5 flex-1 bg-white/40 min-w-[10px]" />
+                <div className="bg-white/20 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 flex-shrink-0">
+                  <span className="text-sm">🚗</span>
+                  <span className="font-bold text-sm">{recommendation.duration}</span>
+                  <span className="text-xs opacity-80">{language === 'id' ? 'm' : 'm'}</span>
+                </div>
+                <div className="h-0.5 flex-1 bg-white/40 min-w-[10px]" />
+              </div>
+            </div>
+
+            {/* Arrival */}
+            <div className="text-center">
+              <p className="text-xs sm:text-sm opacity-80 mb-1 whitespace-nowrap">
+                {language === 'id' ? 'Tiba' : 'Arrive'}
+              </p>
+              <p className="text-xl sm:text-3xl md:text-4xl font-bold whitespace-nowrap">{recommendation.arrivalTime}</p>
+            </div>
           </div>
 
-          {/* Duration indicator */}
-          <div className="flex-1 flex flex-col items-center px-2 sm:px-4 min-w-0">
+          {/* Duration indicator - desktop */}
+          <div className="hidden sm:flex flex-1 flex-col items-center px-2 sm:px-4 min-w-0">
             <div className="flex items-center gap-1 sm:gap-2 w-full min-w-0">
               <div className="h-0.5 flex-1 bg-white/40 min-w-[20px]" />
               <div className="bg-white/20 backdrop-blur-sm px-2 sm:px-3 py-1 rounded-full flex items-center gap-1 sm:gap-2 flex-shrink-0">
@@ -134,14 +157,6 @@ export default function SmartRecommendationCard({
             {weatherDelayText && (
               <p className="text-xs opacity-80 mt-1 text-center truncate max-w-full">{weatherDelayText}</p>
             )}
-          </div>
-
-          {/* Arrival */}
-          <div className="text-center flex-shrink-0">
-            <p className="text-xs sm:text-sm opacity-80 mb-1 whitespace-nowrap">
-              {language === 'id' ? 'Tiba' : 'Arrive'}
-            </p>
-            <p className="text-2xl sm:text-4xl font-bold whitespace-nowrap">{recommendation.arrivalTime}</p>
           </div>
         </div>
       </div>
