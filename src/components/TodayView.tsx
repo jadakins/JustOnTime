@@ -306,7 +306,6 @@ export default function TodayView({
               <div className="flex items-center gap-2 text-slate-400">
                 <div className="h-px flex-1 bg-slate-300 dark:bg-slate-600" />
                 <div className="flex items-center gap-1">
-                  <span className="text-lg">🚗</span>
                   <span className="text-lg font-bold text-slate-700 dark:text-slate-200">
                     {bestOption.duration}
                   </span>
@@ -316,7 +315,7 @@ export default function TodayView({
                 </div>
                 <div className="h-px flex-1 bg-slate-300 dark:bg-slate-600" />
               </div>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="hidden sm:block text-xs text-slate-400 mt-1">
                 {rec?.routeDescription || 'Direct route via Jl. Sudirman'}
               </p>
             </div>
