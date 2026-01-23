@@ -122,10 +122,9 @@ export default function SmartRecommendationCard({
           {/* Duration indicator - vertical line */}
           <div className="flex flex-col items-center gap-0.5 py-0.5">
             <div className="w-0.5 h-2 bg-white/40" />
-            <div className="bg-white/20 backdrop-blur-sm px-2 py-0.5 rounded-full flex items-center gap-0.5 text-center">
-              <span className="text-[10px]">🚗</span>
-              <span className="font-bold text-[11px]">{recommendation.duration}</span>
-              <span className="text-[8px] opacity-75">{language === 'id' ? 'mnt' : 'min'}</span>
+            <div className="bg-white/20 backdrop-blur-sm px-2.5 py-1 rounded-full flex items-center gap-1 text-center">
+              <span className="font-bold text-sm">{recommendation.duration}</span>
+              <span className="text-xs opacity-80">{language === 'id' ? 'mnt' : 'min'}</span>
             </div>
             <div className="w-0.5 h-2 bg-white/40" />
           </div>
@@ -183,7 +182,7 @@ export default function SmartRecommendationCard({
               {recommendation.destinationAddress}
             </p>
             {recommendation.routeDescription && (
-              <p className="text-sm text-slate-600 dark:text-slate-400 break-words">
+              <p className="hidden sm:block text-sm text-slate-600 dark:text-slate-400 break-words">
                 <span className="font-medium">
                   {language === 'id' ? 'Rute: ' : 'Route: '}
                 </span>
