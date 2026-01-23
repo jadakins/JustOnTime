@@ -1,7 +1,7 @@
 {
-  "name": "jakarta-flood-traffic-dashboard",
+  "name": "life-in-jakarta",
   "version": "1.0.0",
-  "description": "Real-time flood and traffic monitoring dashboard for Jakarta",
+  "description": "Smart daily planning app for Jakarta life",
   "private": true,
   "scripts": {
     "dev": "next dev",

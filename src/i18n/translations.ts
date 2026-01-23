@@ -6,8 +6,8 @@
 export const translations = {
   en: {
     // Header
-    appTitle: 'Jakarta Flood & Traffic Dashboard',
-    appSubtitle: 'Real-time monitoring and smart departure planning',
+    appTitle: 'Life in Jakarta',
+    appSubtitle: 'Smart daily planning for your Jakarta life',
     lastUpdated: 'Last updated',
 
     // Language toggle
@@ -104,8 +104,8 @@ export const translations = {
 
   id: {
     // Header
-    appTitle: 'Dashboard Banjir & Lalu Lintas Jakarta',
-    appSubtitle: 'Pemantauan real-time dan perencanaan keberangkatan cerdas',
+    appTitle: 'Kehidupan di Jakarta',
+    appSubtitle: 'Perencanaan harian cerdas untuk kehidupan Jakarta Anda',
     lastUpdated: 'Terakhir diperbarui',
 
     // Language toggle

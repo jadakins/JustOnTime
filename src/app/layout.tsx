@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Jakarta Flood & Traffic Dashboard',
-  description: 'Real-time flood and traffic monitoring dashboard for Jakarta with smart departure planning',
-  keywords: ['Jakarta', 'flood', 'traffic', 'dashboard', 'Indonesia', 'banjir', 'lalu lintas'],
+  title: 'Life in Jakarta',
+  description: 'Smart daily planning for Jakarta life - real-time flood alerts, traffic conditions, and optimal departure times',
+  keywords: ['Jakarta', 'flood', 'traffic', 'dashboard', 'Indonesia', 'banjir', 'lalu lintas', 'life', 'daily planning'],
   authors: [{ name: 'Jakarta Smart City' }],
   viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
 };
